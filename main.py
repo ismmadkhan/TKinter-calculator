@@ -1,24 +1,23 @@
 import tkinter as tk
  
-# 1. Create root window
+# Create root window
 root = tk.Tk()
 root.title("Calculator")
-root.geometry("300x400")
+root.geometry("400x450")
  
-#Tell grid to split window width across 4 columns and 5 rows.
-# Without this, each column only takes up as much width as it needs
 
-for col in range(4):
+
+for col in range(5):
     root.columnconfigure(col, weight=1)
 
 for row in range(5):
     root.rowconfigure(row, weight=1)
  
  
-# create a Display box where numbers and results show up.
-# We use an Entry widget, not a Label, because we want it to look like a real calculator screen
+# create a Display box where the numbers and results show up.
+# use an Entry widget, not a Label because we want it to look like a real calculator screen
 display = tk.Entry(root, font=("Arial", 24), justify="right", bd=10)
-display.grid(row=0, column=0, columnspan=4, sticky="nsew")  # spans all 4 columns
+display.grid(row=0, column=0, columnspan=5, sticky="nsew")  # spans all 4 columns
 
 def click(char):
     display.insert(tk.END, char)
@@ -65,6 +64,10 @@ btn_0.grid(row=4, column=1, sticky="nsew")
 btn_plus = tk.Button(root, text="+", font=("Arial", 18), command=lambda: click("+"))
 btn_plus.grid(row=4, column=3, sticky="nsew")
 
+
+btn_decimal = tk.Button(root, text=".", font=("Arial", 18), command=lambda: click("."))
+btn_decimal.grid(row=4, column=2, sticky="nsew")
+
 def clear():
     display.delete(0, tk.END)
 
@@ -81,7 +84,34 @@ def calculate():
         display.insert(tk.END, "Error")
 
 btn_equals = tk.Button(root, text="=", font=("Arial", 18), command=calculate)
-btn_equals.grid(row=4, column=2, sticky="nsew")
+btn_equals.grid(row=4, column=4, sticky="nsew")
 
-# 4. Start the loop nothing below this line will run until the window closes
+def backspace():
+    current = display.get()
+    display.delete(0, tk.END)
+    display.insert(tk.END, current[:-1])
+
+btn_backspace = tk.Button(root, text="⌫", font=("Arial", 18), command=backspace)
+btn_backspace.grid(row=1, column=4, sticky="nsew")
+
+def percent():
+    result = eval(display.get()) / 100
+    display.delete(0, tk.END)
+    display.insert(tk.END, str(result))
+
+btn_percent = tk.Button(root, text="%", font=("Arial", 18), command=percent)
+btn_percent.grid(row=2, column=4, sticky="nsew")
+
+def negate():
+    current = display.get()
+    if current == "":
+        return
+    result = eval(current) * -1
+    display.delete(0, tk.END)
+    display.insert(tk.END, str(result))
+
+btn_negate = tk.Button(root, text="+/-", font=("Arial", 18), command=negate)
+btn_negate.grid(row=3, column=4, sticky="nsew")
+
+# Start the loop
 root.mainloop()
